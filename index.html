@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Session is Confirmed!</title>
+</head>
+<body>
+  <h1>✅ Your Session is Confirmed!</h1>
+  <div id="pinBox">Loading your secure PIN...</div>
+
+  <script>
+    async function fetchPIN() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session');
+      if (!sessionId) {
+        document.getElementById('pinBox').innerText = "❌ Missing session ID in the URL.";
+        return;
+      }
+
+      try {
+        const res = await fetch("https://raw.githubusercontent.com/peeropenlantern/openlantern-data/main/pinlog_data.json");
+        const data = await res.json();
+
+        const session = data.find(entry => entry.session_id === sessionId);
+        if (!session) {
+          document.getElementById('pinBox').innerText = "❌ Invalid or expired session ID.";
+          return;
+        }
+
+        const sessionTime = new Date(session.date_time_iso);
+        const now = new Date();
+        const diff = (now - sessionTime) / 1000 / 60;
+
+        if (diff > 3) {
+          document.getElementById('pinBox').innerText = "❌ This session has expired.";
+        } else {
+          document.getElementById('pinBox').innerText = `📞 Call (877) 684-2455 and enter your secure PIN: ${session.pin}`;
+        }
+      } catch (err) {
+        document.getElementById('pinBox').innerText = "❌ Error loading PIN data.";
+      }
+    }
+
+    fetchPIN();
+  </script>
+</body>
+</html>
