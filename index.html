@@ -19,7 +19,7 @@
       }
 
       try {
-        const res = await fetch("https://raw.githubusercontent.com/peeropenlantern/openlantern-data/main/pinlog_data.json");
+        const res = await fetch("https://raw.githubusercontent.com/peeropenlantern/openlantern-data/main/pinlog_data.json?t=" + Date.now());
         const data = await res.json();
 
         const session = data.find(entry => entry.session_id === sessionId);
