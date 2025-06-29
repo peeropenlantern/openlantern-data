@@ -32,7 +32,7 @@
         const now = new Date();
         const diff = (now - sessionTime) / 1000 / 60;
 
-        if (diff > 3) {
+        if (diff > 15) {
           document.getElementById('pinBox').innerText = "❌ This session has expired.";
         } else {
           document.getElementById('pinBox').innerText = `📞 Call (877) 684-2455 and enter your secure PIN: ${session.pin}`;
